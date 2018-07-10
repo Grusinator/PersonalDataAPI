@@ -1,8 +1,0 @@
-django >2
-django-filter
-django-cors-headers
-djongo
-graphene
-graphene-django
-graphql-core
-django-graphql-jwt
