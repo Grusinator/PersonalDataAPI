@@ -21,7 +21,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'feb79981-de24-4e84-ba48-c814becdd5ee'
+SECRET_KEY = 'e2021992-b921-4348-9a36-d617f7685c81'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -40,18 +40,43 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'graphene_django',
+    'corsheaders',
+    'PersonalDataApi.datapoints.apps.datapointsConfig',
 ]
 
-MIDDLEWARE_CLASSES = [
+MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    #'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
+    #'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    'graphql_jwt.middleware.JSONWebTokenMiddleware',
 ]
+
+CORS_ORIGIN_ALLOW_ALL = True
+
+CORS_ORIGIN_WHITELIST = (
+    'localhost:3000',
+    'localhost:3002'
+)
+
+AUTHENTICATION_BACKENDS = [
+    'graphql_jwt.backends.JSONWebTokenBackend',
+    'django.contrib.auth.backends.ModelBackend',
+]
+
+GRAPHENE = {
+    'SCHEMA': 'PersonalDataApi.schema.schema',
+    'MIDDLEWARE': (
+        'graphene_django.debug.DjangoDebugMiddleware',
+    )
+}
 
 ROOT_URLCONF = 'PersonalDataApi.urls'
 
@@ -75,15 +100,19 @@ WSGI_APPLICATION = 'PersonalDataApi.wsgi.application'
 
 
 # Database
-# https://docs.djangoproject.com/en/1.9/ref/settings/#databases
-
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'djongo',
+        'NAME': 'personal-data',
     }
 }
 
+#DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.db.backends.sqlite3',
+#        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#    }
+#}
 
 # Password validation
 # https://docs.djangoproject.com/en/1.9/ref/settings/#auth-password-validators
@@ -124,3 +153,8 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 STATIC_ROOT = posixpath.join(*(BASE_DIR.split(os.path.sep) + ['static']))
+
+GRAPHENE = {
+    'SCHEMA': 'PersonalDataApi.schema.schema',
+    'SCHEMA_INDENT': 2,
+}
