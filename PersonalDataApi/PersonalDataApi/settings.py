@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'graphene_django',
     'corsheaders',
+    'graphene_file_upload',
     'PersonalDataApi.datapoints.apps.datapointsConfig',
 ]
 
@@ -153,6 +154,12 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 STATIC_ROOT = posixpath.join(*(BASE_DIR.split(os.path.sep) + ['static']))
+
+
+ENV_PATH = os.path.abspath(os.path.dirname(__file__))
+MEDIA_ROOT = os.path.join(ENV_PATH, 'media/')
+
+MEDIA_URL = '/media/'
 
 GRAPHENE = {
     'SCHEMA': 'PersonalDataApi.schema.schema',

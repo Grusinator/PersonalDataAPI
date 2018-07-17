@@ -10,11 +10,17 @@ import app.forms
 import app.views
 
 from graphene_django.views import GraphQLView
+#in order to upload files
+from graphene_file_upload import ModifiedGraphQLView 
 
 # Uncomment the next lines to enable the admin:
 from django.conf.urls import include
 from django.contrib import admin
 #admin.autodiscover()
+
+
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     # Examples:
@@ -45,7 +51,11 @@ urlpatterns = [
 
     # Uncomment the next line to enable the admin:
     url(r'^admin/', admin.site.urls),
-    url(r'^graphql', GraphQLView.as_view(graphiql=True)),
+    url(r'^graphql', ModifiedGraphQLView.as_view(graphiql=True)),
 ]
 
+
+    # make media accessable
+if settings.DEBUG is True:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

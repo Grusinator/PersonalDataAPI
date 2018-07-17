@@ -6,3 +6,4 @@ graphene
 graphene-django
 graphql-core
 django-graphql-jwt
+Pillow
