@@ -14,7 +14,7 @@ class Datapoint(models.Model):
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, on_delete=models.CASCADE)
 
     def __str__(self):
-        return "%s - %s "%(self.category, self.source_device)
+        return "%i - %s - %s "%(self.id, self.category, self.source_device)
 
     class Meta:
         app_label = 'datapoints'
