@@ -24,6 +24,50 @@ class DatapointType(DjangoObjectType):
         #    'notes': ['exact', 'icontains'],
         #}
 
+class CreateDatapoint(graphene.Mutation):
+    id = graphene.Int()
+    category = graphene.String()
+    owner = graphene.Field(UserType)
+
+    class Arguments:
+        datetime = graphene.DateTime()
+        category = graphene.String()
+        source_device = graphene.String()
+        value = graphene.Float()
+        text_from_audio = graphene.String()
+        files = Upload()
+
+
+    @login_required
+    def mutate(self, info, category, source_device,
+               datetime=None, value=None, text_from_audio=None, files=None):
+
+        uploaded_image = uploaded_audio = None
+
+        if files != None:
+            #make sure which one is the image, audio
+            uploaded_image = info.context.FILES.get(files[0])
+            uploaded_audio = info.context.FILES.get(files[1])
+
+        datapoint = Datapoint(
+            datetime=datetime,
+            category=category,
+            image=uploaded_image,
+            audio=uploaded_audio,
+            source_device=source_device,
+            value=value,
+            text_from_audio=text_from_audio,
+            owner=info.context.user,
+        )
+        datapoint.save()
+
+        
+        return CreateDatapoint(
+            id=datapoint.id,
+            category=datapoint.category,
+            owner=datapoint.owner,
+        )
+
 class DeleteDatapoint(graphene.Mutation):
     id = graphene.Int()
     owner = graphene.Field(UserType)
@@ -72,82 +116,6 @@ class EditDatapoint(graphene.Mutation):
             owner=datapoint.owner
         )
 
-class CreateDatapoint(graphene.Mutation):
-    id = graphene.Int()
-    category = graphene.String()
-    owner = graphene.Field(UserType)
-
-    class Arguments:
-        datetime = graphene.DateTime()
-        category = graphene.String()
-        source_device = graphene.String()
-        value = graphene.Float()
-        text_from_audio = graphene.String()
-        files = Upload()
-
-
-    @login_required
-    def mutate(self, info, category, source_device,
-               datetime=None, value=None, text_from_audio=None, files=None):
-
-        uploaded_image = uploaded_audio = None
-
-        if files != None:
-            #make sure which one is the image, audio
-            uploaded_image = info.context.FILES.get(files[0])
-            uploaded_audio = info.context.FILES.get(files[1])
-
-        datapoint = Datapoint(
-            datetime=datetime,
-            category=category,
-            image=uploaded_image,
-            audio=uploaded_audio,
-            source_device=source_device,
-            value=value,
-            text_from_audio=text_from_audio,
-            owner=info.context.user,
-        )
-        datapoint.save()
-
-        
-        return CreateDatapoint(
-            id=datapoint.id,
-            category=datapoint.category,
-            owner=datapoint.owner,
-        )
-
-class UploadFile(graphene.Mutation):
-    class Arguments:
-        file = Upload(required=True)
-
-    success = graphene.Boolean()
-
-    def mutate(self, info, file, **kwargs):
-        # file parameter is key to uploaded file in FILES from context
-        uploaded_file = info.context.FILES.get(file)
-        # do something with your file
-
-        test = type(uploaded_file)
-
-        return UploadFile(success=uploaded_file != None)
-
-class Upload2Files(graphene.Mutation):
-    class Arguments:
-        files = Upload(required=True)
-
-
-    success = graphene.Boolean()
-
-    def mutate(self, info, files, **kwargs):
-        # file parameter is key to uploaded file in FILES from context
-        uploaded_file = info.context.FILES.get(files[0])
-        uploaded_file2 = info.context.FILES.get(files[1])
-        # do something with your file
-
-        test = type(uploaded_file)
-
-        return UploadFile(success=uploaded_file != None)
-
 class Query(graphene.ObjectType):
     datapoint = graphene.Field(DatapointType)
     all_datapoints = graphene.List(DatapointType)
@@ -164,11 +132,7 @@ class Query(graphene.ObjectType):
         datapointlist = Datapoint.objects.filter(owner=info.context.user)
         return datapointlist
 
-
-
 class Mutation(graphene.ObjectType):
     create_datapoint = CreateDatapoint.Field()
     edit_datapoint = EditDatapoint.Field()
     delete_datapoint = DeleteDatapoint.Field()
-    upload_file = UploadFile.Field()
-    upload2_files = Upload2Files.Field()
