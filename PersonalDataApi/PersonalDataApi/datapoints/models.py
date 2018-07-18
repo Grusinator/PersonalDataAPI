@@ -1,11 +1,22 @@
 from django.db import models
 from django.conf import settings
+from enum import Enum
 
 # Create your models here.
 
+
+class CategoryTypes(Enum):
+    test = "TST"
+    weight = "WGT"
+    speech_audio = "SPC"
+    shit_cam = "SHT"
+    food_picture = "FOD"
+    heart_rate = "HRT"
+
 class Datapoint(models.Model):
     datetime = models.DateTimeField(auto_now=True)
-    category = models.TextField(null=False, blank=False)
+    category = models.TextField(null=False, blank=False, max_length=3,
+        choices=[(tag, tag.value) for tag in CategoryTypes])
     image = models.ImageField(upload_to='datapoints/images', null=True, blank=True)
     audio = models.FileField(upload_to='datapoints/audio', null=True, blank=True)
     source_device = models.TextField(null=False, blank=False)

@@ -11,8 +11,9 @@ from graphql_jwt.decorators import login_required
 from PersonalDataApi.users.schema import UserType
 from django.contrib.auth import get_user_model
 
-from PersonalDataApi.datapoints.models import Datapoint
+from PersonalDataApi.datapoints.models import Datapoint, CategoryTypes
 
+GrapheneCategoryTypes = graphene.Enum.from_enum(CategoryTypes)
 
 class DatapointType(DjangoObjectType):
     class Meta:
@@ -26,12 +27,12 @@ class DatapointType(DjangoObjectType):
 
 class CreateDatapoint(graphene.Mutation):
     id = graphene.Int()
-    category = graphene.String()
+    category = GrapheneCategoryTypes()
     owner = graphene.Field(UserType)
 
     class Arguments:
         datetime = graphene.DateTime()
-        category = graphene.String()
+        category = GrapheneCategoryTypes()
         source_device = graphene.String()
         value = graphene.Float()
         text_from_audio = graphene.String()
@@ -46,6 +47,7 @@ class CreateDatapoint(graphene.Mutation):
 
         if files != None:
             #make sure which one is the image, audio
+            # currently we are assuming the first one is image, the second audio
             uploaded_image = info.context.FILES.get(files[0])
             uploaded_audio = info.context.FILES.get(files[1])
 
@@ -61,7 +63,6 @@ class CreateDatapoint(graphene.Mutation):
         )
         datapoint.save()
 
-        
         return CreateDatapoint(
             id=datapoint.id,
             category=datapoint.category,
