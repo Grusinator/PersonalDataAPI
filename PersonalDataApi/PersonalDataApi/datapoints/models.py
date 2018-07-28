@@ -16,7 +16,7 @@ class CategoryTypes(Enum):
 class Datapoint(models.Model):
     datetime = models.DateTimeField(auto_now=True)
     category = models.TextField(null=False, blank=False, max_length=3,
-        choices=[(tag, tag.value) for tag in CategoryTypes])
+        choices=[(tag, tag.value) for tag in CategoryTypes])    
     image = models.ImageField(upload_to='datapoints/images', null=True, blank=True)
     audio = models.FileField(upload_to='datapoints/audio', null=True, blank=True)
     source_device = models.TextField(null=False, blank=False)

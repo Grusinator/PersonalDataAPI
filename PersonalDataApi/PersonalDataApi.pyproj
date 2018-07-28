@@ -6,6 +6,7 @@
     <RootNamespace>PersonalDataApi</RootNamespace>
     <InterpreterId>MSBuild|env|$(MSBuildProjectFullPath)</InterpreterId>
     <WebBrowserPort>8000</WebBrowserPort>
+    <PythonRunWebServerCommandArguments>runserver --settings $(DjangoSettingsModule) %SERVER_PORT%  $(CommandLineArguments)</PythonRunWebServerCommandArguments>
   </PropertyGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -17,7 +18,8 @@
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
-    <WebBrowserUrl>http://localhost</WebBrowserUrl>
+    <WebBrowserUrl>
+    </WebBrowserUrl>
     <LaunchProvider>Django launcher</LaunchProvider>
     <DjangoSettingsModule>PersonalDataApi.settings</DjangoSettingsModule>
     <OutputPath>.</OutputPath>

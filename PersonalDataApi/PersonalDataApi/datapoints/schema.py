@@ -117,6 +117,20 @@ class EditDatapoint(graphene.Mutation):
             owner=datapoint.owner
         )
 
+
+class UploadFile(graphene.Mutation):
+    class Arguments:
+        file = Upload(required=True)
+
+    success = graphene.Boolean()
+
+    def mutate(self, info, file, **kwargs):
+        # file parameter is key to uploaded file in FILES from context
+        uploaded_file = info.context.FILES.get(file)
+        # do something with your file
+
+        return UploadFile(success=uploaded_file != None)
+
 class Query(graphene.ObjectType):
     datapoint = graphene.Field(DatapointType)
     all_datapoints = graphene.List(DatapointType)
@@ -137,3 +151,4 @@ class Mutation(graphene.ObjectType):
     create_datapoint = CreateDatapoint.Field()
     edit_datapoint = EditDatapoint.Field()
     delete_datapoint = DeleteDatapoint.Field()
+    upload_file = UploadFile.Field()
