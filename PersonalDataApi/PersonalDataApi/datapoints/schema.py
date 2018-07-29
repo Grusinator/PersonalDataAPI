@@ -27,7 +27,11 @@ class DatapointType(DjangoObjectType):
 
 class CreateDatapoint(graphene.Mutation):
     id = graphene.Int()
+    datetime = graphene.DateTime()
     category = GrapheneCategoryTypes()
+    source_device = graphene.String()
+    value = graphene.Float()
+    text_from_audio = graphene.String()
     owner = graphene.Field(UserType)
 
     class Arguments:
@@ -65,7 +69,11 @@ class CreateDatapoint(graphene.Mutation):
 
         return CreateDatapoint(
             id=datapoint.id,
+            datetime=datapoint.datetime,
             category=datapoint.category,
+            source_device=datapoint.source_device,
+            value=datapoint.value,
+            text_from_audio=datapoint.text_from_audio,
             owner=datapoint.owner,
         )
 
@@ -131,6 +139,21 @@ class UploadFile(graphene.Mutation):
 
         return UploadFile(success=uploaded_file != None)
 
+class Upload2Files(graphene.Mutation):
+    class Arguments:
+        files = Upload(required=True)
+
+
+    success = graphene.Boolean()
+
+    def mutate(self, info, files, **kwargs):
+        # file parameter is key to uploaded file in FILES from context
+        uploaded_file = info.context.FILES.get(files[0])
+        uploaded_file2 = info.context.FILES.get(files[1])
+        # do something with your file
+
+        return UploadFile(success=uploaded_file != None)
+
 class Query(graphene.ObjectType):
     datapoint = graphene.Field(DatapointType)
     all_datapoints = graphene.List(DatapointType)
@@ -152,3 +175,4 @@ class Mutation(graphene.ObjectType):
     edit_datapoint = EditDatapoint.Field()
     delete_datapoint = DeleteDatapoint.Field()
     upload_file = UploadFile.Field()
+    upload2_files = Upload2Files.Field()

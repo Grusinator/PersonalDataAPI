@@ -3,6 +3,7 @@
 
 env/
 
+PersonalDataApi/PersonalDataApi/media/
 
 # User-specific files
 *.suo
