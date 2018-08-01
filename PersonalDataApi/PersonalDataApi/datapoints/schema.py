@@ -13,6 +13,8 @@ from django.contrib.auth import get_user_model
 
 from PersonalDataApi.datapoints.models import Datapoint, CategoryTypes
 
+from PersonalDataApi.services.google_speech_api import transcribe_file
+
 GrapheneCategoryTypes = graphene.Enum.from_enum(CategoryTypes)
 
 class DatapointType(DjangoObjectType):
@@ -27,8 +29,12 @@ class DatapointType(DjangoObjectType):
 
 class CreateDatapoint(graphene.Mutation):
     id = graphene.Int()
+    datetime = graphene.DateTime()
     category = GrapheneCategoryTypes()
     owner = graphene.Field(UserType)
+    source_device = graphene.String()
+    value = graphene.Float()
+    text_from_audio = graphene.String()
 
     class Arguments:
         datetime = graphene.DateTime()
@@ -51,6 +57,9 @@ class CreateDatapoint(graphene.Mutation):
             uploaded_image = info.context.FILES.get(files[0])
             uploaded_audio = info.context.FILES.get(files[1])
 
+
+        text_from_audio = transcribe_file(uploaded_audio) if (uploaded_audio != None) else None 
+
         datapoint = Datapoint(
             datetime=datetime,
             category=category,
@@ -65,7 +74,11 @@ class CreateDatapoint(graphene.Mutation):
 
         return CreateDatapoint(
             id=datapoint.id,
+            datetime=datapoint.datetime,
             category=datapoint.category,
+            source_device=datapoint.source_device,
+            value=datapoint.value,
+            text_from_audio=datapoint.text_from_audio,
             owner=datapoint.owner,
         )
 

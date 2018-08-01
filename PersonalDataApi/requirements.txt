@@ -7,3 +7,4 @@ graphene-django
 graphql-core
 django-graphql-jwt
 Pillow
+SpeechRecognition

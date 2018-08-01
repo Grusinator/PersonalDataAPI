@@ -64,6 +64,10 @@
     <Compile Include="PersonalDataApi\settings.py" />
     <Compile Include="PersonalDataApi\urls.py" />
     <Compile Include="PersonalDataApi\wsgi.py" />
+    <Compile Include="PersonalDataApi\services\google_speech_api.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="PersonalDataApi\services\__init__.py" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="app\" />
@@ -75,6 +79,7 @@
     <Folder Include="app\static\app\scripts\" />
     <Folder Include="app\templates\" />
     <Folder Include="app\templates\app\" />
+    <Folder Include="PersonalDataApi\services\" />
     <Folder Include="PersonalDataApi\datapoints\" />
     <Folder Include="PersonalDataApi\datapoints\migrations\" />
     <Folder Include="PersonalDataApi\datapoints\templates\" />
