@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.2035
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "PersonalDataApi", "PersonalDataApi\PersonalDataApi.pyproj", "{2B3E86CE-F363-448F-8843-D7D05A798D5F}"
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "PersonalDataApi", "PersonalDataApi.pyproj", "{2B3E86CE-F363-448F-8843-D7D05A798D5F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

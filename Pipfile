@@ -14,10 +14,13 @@ django-cors-headers = "*"
 djongo = "*"
 graphene = "*"
 graphene-django = "*"
+graphene_file_upload = "*"
 graphql-core = "*"
 django-graphql-jwt = "*"
 Pillow = "*"
 SpeechRecognition = "*"
+django_heroku "*"
+
 
 
 [requires]
