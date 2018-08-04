@@ -20,7 +20,7 @@ class Datapoint(models.Model):
     image = models.ImageField(upload_to='datapoints/images', null=True, blank=True)
     audio = models.FileField(upload_to='datapoints/audio', null=True, blank=True)
     source_device = models.TextField(null=False, blank=False)
-    value = models.FloatField(blank=True)
+    value = models.FloatField(null=True, blank=True)
     text_from_audio = models.TextField(null=True,blank=True)
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, on_delete=models.CASCADE)
 

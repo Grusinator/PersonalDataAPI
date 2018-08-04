@@ -60,8 +60,10 @@ class CreateDatapoint(graphene.Mutation):
             uploaded_image = info.context.FILES.get(files[0])
             uploaded_audio = info.context.FILES.get(files[1])
 
-
-        text_from_audio = transcribe_file(uploaded_audio) if (uploaded_audio != None) else None 
+        try:
+            text_from_audio = transcribe_file(uploaded_audio) if (uploaded_audio != None) else None 
+        except ValueError as e:
+            print(e)
 
         datapoint = Datapoint(
             datetime=datetime,
