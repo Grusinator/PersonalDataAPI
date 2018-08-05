@@ -1,23 +1,28 @@
 [[source]]
-url = "https://pypi.org/simple"
+
+url = "https://pypi.python.org/simple"
 verify_ssl = true
-name = "pypi"
+
 
 [packages]
-django = ">2"
+
+django = "*"
+gunicorn = "*"
+django-heroku = "*"
 django-filter = "*"
 django-cors-headers = "*"
 djongo = "*"
 graphene = "*"
 graphene-django = "*"
-graphene-file-upload = "*"
+graphene_file_upload = "*"
 graphql-core = "*"
 django-graphql-jwt = "*"
-pillow = "*"
-speechrecognition = "*"
-django-heroku = "*"
+Pillow = "*"
+SpeechRecognition = "*"
+django_heroku = "*"
 
-[dev-packages]
+
 
 [requires]
+
 python_version = "3.6"
