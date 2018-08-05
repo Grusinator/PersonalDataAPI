@@ -16,6 +16,7 @@ django-graphql-jwt = "*"
 pillow = "*"
 speechrecognition = "*"
 django-heroku = "*"
+google-api-python-client = "==1.5.3"
 
 [dev-packages]
 
