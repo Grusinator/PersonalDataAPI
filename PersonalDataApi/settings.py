@@ -13,7 +13,6 @@ https://docs.djangoproject.com/en/1.9/ref/settings/
 import os
 import posixpath
 import django_heroku
-from PersonalDataApi.useraccounts.apps import useraccountsConfig
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -46,7 +45,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'graphene_file_upload',
     'PersonalDataApi.datapoints.apps.datapointsConfig',
-    'PersonalDataApi.useraccounts.apps.useraccountsConfig',
+    'PersonalDataApi.profiles.apps.profilesConfig',
 ]
 
 MIDDLEWARE = [

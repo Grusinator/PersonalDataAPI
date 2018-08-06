@@ -9,7 +9,7 @@ class Languages(Enum):
     en = "en-US"
     dk = "da-DK"
 
-class Useraccount(models.Model):
+class Profiles(models.Model):
     name = models.TextField(null=True, blank=True)
     birthdate = models.DateField(null=True, blank=True)
     language = models.TextField(null=False, blank=False, max_length=5,
@@ -21,4 +21,4 @@ class Useraccount(models.Model):
         return "%i - %s - %s "%(self.id, self.name, self.birthdate)
 
     class Meta:
-        app_label = 'useraccount'
+        app_label = 'profiles'

@@ -51,6 +51,13 @@
     <Compile Include="PersonalDataApi\datapoints\tests.py" />
     <Compile Include="PersonalDataApi\datapoints\views.py" />
     <Compile Include="PersonalDataApi\datapoints\__init__.py" />
+    <Compile Include="PersonalDataApi\profiles\admin.py" />
+    <Compile Include="PersonalDataApi\profiles\apps.py" />
+    <Compile Include="PersonalDataApi\profiles\migrations\__init__.py" />
+    <Compile Include="PersonalDataApi\profiles\models.py" />
+    <Compile Include="PersonalDataApi\profiles\tests.py" />
+    <Compile Include="PersonalDataApi\profiles\views.py" />
+    <Compile Include="PersonalDataApi\profiles\__init__.py" />
     <Compile Include="PersonalDataApi\schema.py">
       <SubType>Code</SubType>
     </Compile>
@@ -86,6 +93,9 @@
     <Folder Include="app\static\app\scripts\" />
     <Folder Include="app\templates\" />
     <Folder Include="app\templates\app\" />
+    <Folder Include="PersonalDataApi\profiles\" />
+    <Folder Include="PersonalDataApi\profiles\migrations\" />
+    <Folder Include="PersonalDataApi\profiles\templates\" />
     <Folder Include="PersonalDataApi\services\" />
     <Folder Include="PersonalDataApi\datapoints\" />
     <Folder Include="PersonalDataApi\datapoints\migrations\" />
@@ -98,6 +108,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="PersonalDataApi\datapoints\templates\index.html" />
+    <Content Include="PersonalDataApi\profiles\templates\index.html" />
     <Content Include="PersonalDataApi\useraccounts\templates\index.html" />
     <Content Include="requirements.txt" />
     <Content Include="db.sqlite3" />
