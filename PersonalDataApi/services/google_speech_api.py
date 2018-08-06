@@ -15,16 +15,16 @@ def get_google_api_key():
 
     return GOOGLE_CLOUD_SPEECH_CREDENTIALS
 
-def transcribe_file(name):
+def transcribe_file(audiofile, language="da-DK"):
 
     GOOGLE_CLOUD_SPEECH_CREDENTIALS = get_google_api_key()
 
     r = sr.Recognizer()
 
-    with sr.AudioFile(name) as source:
+    with sr.AudioFile(audiofile) as source:
         audio = r.record(source)
     # Transcribe audio file
-    text = r.recognize_google_cloud(audio, credentials_json=GOOGLE_CLOUD_SPEECH_CREDENTIALS)
+    text = r.recognize_google_cloud(audio, language=language, credentials_json=GOOGLE_CLOUD_SPEECH_CREDENTIALS)
 
     return text
 

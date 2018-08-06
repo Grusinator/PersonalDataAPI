@@ -4,6 +4,8 @@ from graphene import AbstractType, Node, Mutation, String, ObjectType, Field, Li
 from graphene_django import DjangoObjectType
 from graphene_django.filter import DjangoFilterConnectionField
 
+from PersonalDataApi.useraccounts.models import Useraccount
+
 class UserType(DjangoObjectType):
     class Meta:
         model = get_user_model()
@@ -21,13 +23,20 @@ class CreateUser(Mutation):
         password = String(required=True)
         email = String(required=True)
 
-    def mutate(self, info, username, password, email):
+    def mutate(self, info, username, password, email, name=None, birthdate=None):
         user = get_user_model()(
             username=username,
             email=email,
         )
         user.set_password(password)
         user.save()
+
+        useraccount = Useraccount(
+            name=name,
+            birthdate=birthdate,
+            user=user
+        )
+        useraccount.save()
 
         return CreateUser(user=user)
 

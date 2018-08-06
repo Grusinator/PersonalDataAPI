@@ -54,6 +54,13 @@
     <Compile Include="PersonalDataApi\schema.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="PersonalDataApi\useraccounts\admin.py" />
+    <Compile Include="PersonalDataApi\useraccounts\apps.py" />
+    <Compile Include="PersonalDataApi\useraccounts\migrations\__init__.py" />
+    <Compile Include="PersonalDataApi\useraccounts\models.py" />
+    <Compile Include="PersonalDataApi\useraccounts\tests.py" />
+    <Compile Include="PersonalDataApi\useraccounts\views.py" />
+    <Compile Include="PersonalDataApi\useraccounts\__init__.py" />
     <Compile Include="PersonalDataApi\users\schema.py">
       <SubType>Code</SubType>
     </Compile>
@@ -83,11 +90,15 @@
     <Folder Include="PersonalDataApi\datapoints\" />
     <Folder Include="PersonalDataApi\datapoints\migrations\" />
     <Folder Include="PersonalDataApi\datapoints\templates\" />
+    <Folder Include="PersonalDataApi\useraccounts\" />
+    <Folder Include="PersonalDataApi\useraccounts\migrations\" />
+    <Folder Include="PersonalDataApi\useraccounts\templates\" />
     <Folder Include="PersonalDataApi\users\" />
     <Folder Include="PersonalDataApi\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="PersonalDataApi\datapoints\templates\index.html" />
+    <Content Include="PersonalDataApi\useraccounts\templates\index.html" />
     <Content Include="requirements.txt" />
     <Content Include="db.sqlite3" />
     <Content Include="app\static\app\content\bootstrap.css" />
