@@ -9,7 +9,7 @@ class Languages(Enum):
     en = "en-US"
     dk = "da-DK"
 
-class Profiles(models.Model):
+class Profile(models.Model):
     name = models.TextField(null=True, blank=True)
     birthdate = models.DateField(null=True, blank=True)
     language = models.TextField(null=False, blank=False, max_length=5,
