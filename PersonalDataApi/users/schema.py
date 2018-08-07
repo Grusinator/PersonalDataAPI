@@ -1,10 +1,11 @@
 from django.contrib.auth import get_user_model
 
-from graphene import AbstractType, Node, Mutation, String, ObjectType, Field, List, Date
+from graphene import AbstractType, Node, Mutation, String, ObjectType, Field, List, Date, Enum
 from graphene_django import DjangoObjectType
 from graphene_django.filter import DjangoFilterConnectionField
 
-from PersonalDataApi.profiles.models import Profile
+from PersonalDataApi.profiles.models import Profile, Languages
+GrapheneLanguages = Enum.from_enum(Languages)
 
 class UserType(DjangoObjectType):
     class Meta:
@@ -24,8 +25,9 @@ class CreateUser(Mutation):
         email = String(required=True)
         name = String()
         birthdate = Date()
+        language = GrapheneLanguages()
 
-    def mutate(self, info, username, password, email, name=None, birthdate=None):
+    def mutate(self, info, username, password, email, name=None, birthdate=None, language=None):
         user = get_user_model()(
             username=username,
             email=email,
@@ -36,7 +38,8 @@ class CreateUser(Mutation):
         profile = Profile(
             name=name,
             birthdate=birthdate,
-            user=user
+            user=user,
+            language=language
         )
         profile.save()
 

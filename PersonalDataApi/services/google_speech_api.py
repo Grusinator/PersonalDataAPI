@@ -1,7 +1,14 @@
 import speech_recognition as sr
 import os
+from enum import Enum
 
 #from pydub import AudioSegment
+
+GoogleLanguages = {
+        "en" : "en-US",
+        "dk" : "da-DK"
+    }
+   
 
 def get_google_api_key():
     api_key_filename = r"C:\Users\William S. Hansen\source\api-keys\Free_Trial\PersonalData-9d8c53dee9bd.json"
@@ -15,7 +22,10 @@ def get_google_api_key():
 
     return GOOGLE_CLOUD_SPEECH_CREDENTIALS
 
-def transcribe_file(audiofile, language="da-DK"):
+def transcribe_file(audiofile, language="dk"):
+
+    #convert to google languages
+    language = GoogleLanguages[language]
 
     GOOGLE_CLOUD_SPEECH_CREDENTIALS = get_google_api_key()
 

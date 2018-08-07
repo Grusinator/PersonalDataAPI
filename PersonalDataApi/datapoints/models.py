@@ -16,7 +16,7 @@ class CategoryTypes(Enum):
 class Datapoint(models.Model):
     datetime = models.DateTimeField(auto_now=True)
     category = models.TextField(null=False, blank=False, max_length=3,
-        choices=[(tag, tag.value) for tag in CategoryTypes])    
+        choices=[(str(tag), tag.value) for tag in CategoryTypes])    
     image = models.ImageField(upload_to='datapoints/images', null=True, blank=True)
     audio = models.FileField(upload_to='datapoints/audio', null=True, blank=True)
     source_device = models.TextField(null=False, blank=False)
@@ -25,7 +25,7 @@ class Datapoint(models.Model):
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, on_delete=models.CASCADE)
 
     def __str__(self):
-        return "%i - %s - %s "%(self.id, self.category, self.source_device)
+        return "%i - %s - %s "%(self.id, CategoryTypes[self.category], self.source_device)
 
     class Meta:
         app_label = 'datapoints'

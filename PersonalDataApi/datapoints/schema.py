@@ -12,6 +12,7 @@ from PersonalDataApi.users.schema import UserType
 from django.contrib.auth import get_user_model
 
 from PersonalDataApi.datapoints.models import Datapoint, CategoryTypes
+from PersonalDataApi.profiles.models import Profile
 
 from PersonalDataApi.services.google_speech_api import transcribe_file
 
@@ -60,8 +61,12 @@ class CreateDatapoint(graphene.Mutation):
             uploaded_image = info.context.FILES.get(files[0])
             uploaded_audio = info.context.FILES.get(files[1])
 
+   
+        profile = Profile.objects.get(user=info.context.user)
+        
+
         try:
-            text_from_audio = transcribe_file(uploaded_audio) if (uploaded_audio != None) else None 
+            text_from_audio = transcribe_file(uploaded_audio, profile.language) if (uploaded_audio != None) else None 
         except ValueError as e:
             print(e)
 
