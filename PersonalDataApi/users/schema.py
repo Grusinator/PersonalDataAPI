@@ -19,6 +19,7 @@ class UserType(DjangoObjectType):
 class CreateUser(Mutation):
     user = Field(UserType)
 
+
     class Arguments:
         username = String(required=True)
         password = String(required=True)
@@ -27,7 +28,7 @@ class CreateUser(Mutation):
         birthdate = Date()
         language = GrapheneLanguages()
 
-    def mutate(self, info, username, password, email, name=None, birthdate=None, language=None):
+    def mutate(self, info, username, password, email, name=None, birthdate=None, language="English"):
         user = get_user_model()(
             username=username,
             email=email,

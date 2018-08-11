@@ -4,9 +4,10 @@
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <Name>PersonalDataApi</Name>
     <RootNamespace>PersonalDataApi</RootNamespace>
-    <InterpreterId>MSBuild|PersonalDataApi-KdBLYbHC|$(MSBuildProjectFullPath)</InterpreterId>
+    <InterpreterId>MSBuild|PersonalDataApi-MQ_kzq5F|$(MSBuildProjectFullPath)</InterpreterId>
     <WebBrowserPort>8000</WebBrowserPort>
     <PythonRunWebServerCommandArguments>runserver --settings $(DjangoSettingsModule) %SERVER_PORT%  $(CommandLineArguments)</PythonRunWebServerCommandArguments>
+    <PythonDebugWebServerCommandArguments>runserver  --noreload --settings $(DjangoSettingsModule) %SERVER_PORT% $(CommandLineArguments)</PythonDebugWebServerCommandArguments>
   </PropertyGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -136,19 +137,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Interpreter Include="..\..\..\..\.virtualenvs\PersonalDataApi-KdBLYbHC\">
-      <Id>PersonalDataApi-KdBLYbHC</Id>
+    <Interpreter Include="..\..\..\..\.virtualenvs\PersonalDataApi-MQ_kzq5F\">
+      <Id>PersonalDataApi-MQ_kzq5F</Id>
       <Version>3.6</Version>
-      <Description>PersonalDataApi-KdBLYbHC (Python 3.6 (64-bit))</Description>
-      <InterpreterPath>Scripts\python.exe</InterpreterPath>
-      <WindowsInterpreterPath>Scripts\pythonw.exe</WindowsInterpreterPath>
-      <PathEnvironmentVariable>PYTHONPATH</PathEnvironmentVariable>
-      <Architecture>X64</Architecture>
-    </Interpreter>
-    <Interpreter Include="env\">
-      <Id>env</Id>
-      <Version>3.6</Version>
-      <Description>env (Python 3.6 (64-bit))</Description>
+      <Description>PersonalDataApi-MQ_kzq5F (Anaconda 5.0.1)</Description>
       <InterpreterPath>Scripts\python.exe</InterpreterPath>
       <WindowsInterpreterPath>Scripts\pythonw.exe</WindowsInterpreterPath>
       <PathEnvironmentVariable>PYTHONPATH</PathEnvironmentVariable>
