@@ -1,4 +1,4 @@
 
-env\Scripts\activate.ps1
+REM  env\Scripts\activate.ps1
 
-python manage.py runserver 0.0.0.0:8000
+pipenv run python manage.py runserver 0.0.0.0:8000

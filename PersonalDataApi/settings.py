@@ -168,5 +168,10 @@ GRAPHENE = {
     'SCHEMA_INDENT': 2,
 }
 
+settings_dir = os.path.dirname(__file__)
+PROJECT_ROOT = os.path.abspath(os.path.dirname(settings_dir))
+ML_models_dir = os.path.join(PROJECT_ROOT, "PersonalDataApi/services/sound_classification/models")
+
+
 # Activate Django-Heroku.
 django_heroku.settings(locals())

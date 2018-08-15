@@ -15,6 +15,7 @@ from PersonalDataApi.datapoints.models import Datapoint, CategoryTypes
 from PersonalDataApi.profiles.models import Profile
 
 from PersonalDataApi.services.google_speech_api import transcribe_file
+from PersonalDataApi.services.sound_processing_services import SoundClassifier
 
 GrapheneCategoryTypes = graphene.Enum.from_enum(CategoryTypes)
 
@@ -40,6 +41,8 @@ class CreateDatapoint(graphene.Mutation):
     value = graphene.Float()
     text_from_audio = graphene.String()
 
+    
+
     class Arguments:
         datetime = graphene.DateTime()
         category = GrapheneCategoryTypes()
@@ -64,6 +67,12 @@ class CreateDatapoint(graphene.Mutation):
    
         profile = Profile.objects.get(user=info.context.user)
         
+        try:
+            sound_clasifier = SoundClassifier()
+            predictions = sound_clasifier.classify_sound(uploaded_audio) 
+        except ValueError as e:
+            print(e)
+
 
         try:
             text_from_audio = transcribe_file(uploaded_audio, profile.language) if (uploaded_audio != None) else None 

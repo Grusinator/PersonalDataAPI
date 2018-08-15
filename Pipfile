@@ -18,6 +18,12 @@ speechrecognition = "*"
 django-heroku = "*"
 google-api-python-client = "==1.5.3"
 
+numpy = "==1.13.3"
+scipy = ">=1.1.0"
+resampy = "==0.2.0"
+PyAudio = "==0.2.11"
+tensorflow = "==1.3.0"
+
 [dev-packages]
 
 [requires]

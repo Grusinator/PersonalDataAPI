@@ -18,7 +18,7 @@ class Profile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, null=True, on_delete=models.CASCADE)
 
     def __str__(self):
-        return "%i - %s - %s "%(self.id, self.name, self.language)
+        return "%i - %s - %s - %s"%(self.id, self.user.username, self.name, self.language)
 
     class Meta:
         app_label = 'profiles'
