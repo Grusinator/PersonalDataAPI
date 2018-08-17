@@ -81,7 +81,7 @@ class CreateDatapoint(graphene.Mutation):
                 if not set(best_keywords) & set(valid_voice_list):
                     text_from_audio = "!V! "
                     #text_from_audio = "Not voice, more likely: " + " or ".join(best_keywords)
-            except ValueError as e:
+            except Exception as e:
                 print(e)
 
             try:
