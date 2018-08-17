@@ -73,6 +73,7 @@ class CreateDatapoint(graphene.Mutation):
             text_from_audio = ""
             
             try:
+                raise ValueError('not implemented fully yet')
                 sound_clasifier = SoundClassifier()
                 predictions = sound_clasifier.classify_sound(uploaded_audio)
 
