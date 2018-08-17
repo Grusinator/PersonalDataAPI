@@ -78,6 +78,9 @@
     <Compile Include="PersonalDataApi\services\sound_processing_services.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="PersonalDataApi\services\voice_activity_detection.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="PersonalDataApi\users\schema.py">
       <SubType>Code</SubType>
     </Compile>

@@ -66,18 +66,25 @@ class CreateDatapoint(graphene.Mutation):
 
    
         profile = Profile.objects.get(user=info.context.user)
+
+        valid_voice_list = ["Speech", "Dialog", "Laughter"]
         
-        try:
+        if uploaded_audio is not None:
             sound_clasifier = SoundClassifier()
-            predictions = sound_clasifier.classify_sound(uploaded_audio) 
-        except ValueError as e:
-            print(e)
+            predictions = sound_clasifier.classify_sound(uploaded_audio)
 
+            best_keywords = list(map(lambda x: x[0], predictions))
 
-        try:
-            text_from_audio = transcribe_file(uploaded_audio, profile.language) if (uploaded_audio != None) else None 
-        except ValueError as e:
-            print(e)
+            if not set(best_keywords) & set(valid_voice_list):
+                text_from_audio = "!V! "
+                #text_from_audio = "Not voice, more likely: " + " or ".join(best_keywords)
+
+            try:
+                text_from_audio += transcribe_file(uploaded_audio, profile.language) if (uploaded_audio != None) else None 
+            except ValueError as e:
+                print(e)
+
+        
 
         datapoint = Datapoint(
             datetime=datetime,
