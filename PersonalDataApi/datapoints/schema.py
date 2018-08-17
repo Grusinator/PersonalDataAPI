@@ -70,6 +70,7 @@ class CreateDatapoint(graphene.Mutation):
         valid_voice_list = ["Speech", "Dialog", "Laughter"]
         
         if uploaded_audio is not None:
+            text_from_audio = ""
             
             try:
                 sound_clasifier = SoundClassifier()

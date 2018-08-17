@@ -29,7 +29,8 @@ class Datapoint(models.Model):
     audio = models.FileField(upload_to='datapoints/audio', null=True, blank=True)
     source_device = models.TextField(null=False, blank=False)
     value = models.FloatField(null=True, blank=True)
-    text_from_audio = models.TextField(null=True,blank=True)
+    text_from_audio = models.TextField(null=True, blank=True)
+    #dynamic_attributes = models.TextField(null=True, blank=True)
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, on_delete=models.CASCADE)
 
     def __str__(self):

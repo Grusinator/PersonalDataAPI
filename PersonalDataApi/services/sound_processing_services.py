@@ -2,8 +2,10 @@ import numpy as np
 from scipy.io import wavfile
 
 from PersonalDataApi.services.sound_classification.processor import WavProcessor, format_predictions
+from service_objects.services import Service
 
-class SoundClassifier:
+
+class SoundClassifier(Service):
     proc = None
     def __init__(self):
         self.proc = WavProcessor()
