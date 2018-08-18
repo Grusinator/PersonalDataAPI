@@ -15,7 +15,11 @@ class Profile(models.Model):
     language = models.TextField(null=False, blank=False, max_length=2,
         choices=[(tag.value, tag.name) for tag in Languages])
     profilepicture = models.ImageField(upload_to='profilepictures', null=True, blank=True)
+    audio_threshold = models.FloatField(null=True,blank=True)
+
+    
     user = models.OneToOneField(settings.AUTH_USER_MODEL, null=True, on_delete=models.CASCADE)
+
 
     def __str__(self):
         return "%i - %s - %s - %s"%(self.id, self.user.username, self.name, self.language)

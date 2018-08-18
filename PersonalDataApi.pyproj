@@ -56,6 +56,9 @@
     <Compile Include="PersonalDataApi\profiles\apps.py" />
     <Compile Include="PersonalDataApi\profiles\migrations\__init__.py" />
     <Compile Include="PersonalDataApi\profiles\models.py" />
+    <Compile Include="PersonalDataApi\profiles\schema.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="PersonalDataApi\profiles\tests.py" />
     <Compile Include="PersonalDataApi\profiles\views.py" />
     <Compile Include="PersonalDataApi\profiles\__init__.py" />
