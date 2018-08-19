@@ -20,6 +20,16 @@ class UserType(DjangoObjectType):
         #    'email': ['exact', 'icontains'],
          #   }
 
+class ProfileType(DjangoObjectType):
+    class Meta:
+        model = Profile
+        # Allow for some more advanced filtering here
+        #interfaces = (graphene.Node, )
+        #filter_fields = {
+        #    'name': ['exact', 'icontains', 'istartswith'],
+        #    'notes': ['exact', 'icontains'],
+        #}
+
 class CreateUser(Mutation):
     user = Field(UserType)
 
@@ -51,23 +61,9 @@ class CreateUser(Mutation):
         return CreateUser(user=user)
 
 
-class ProfileType(DjangoObjectType):
-    class Meta:
-        model = Profile
-        # Allow for some more advanced filtering here
-        #interfaces = (graphene.Node, )
-        #filter_fields = {
-        #    'name': ['exact', 'icontains', 'istartswith'],
-        #    'notes': ['exact', 'icontains'],
-        #}
-
 class UpdateProfile(Mutation):
-    user = Field(UserType)
-    name = String()
-    birthdate = Date()
-    language = GrapheneLanguages()
-    #profilepicture = Upload()
-    audio_threshold = Float()
+    profile = Field(ProfileType)
+
 
     class Arguments:
         name = String()
@@ -96,12 +92,7 @@ class UpdateProfile(Mutation):
 
         profile.save()
 
-        return UpdateProfile(
-            name=profile.name,
-            birthdate=profile.birthdate,
-            language=profile.language,
-            audio_threshold=profile.audio_threshold,
-            user=profile.user)
+        return UpdateProfile(profile)
 
 class Mutation(ObjectType):
     create_user = CreateUser.Field()
