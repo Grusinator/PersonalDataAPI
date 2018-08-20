@@ -12,7 +12,7 @@ from PersonalDataApi.users.schema import UserType
 from django.contrib.auth import get_user_model
 
 from PersonalDataApi.datapoints.models import Datapoint, CategoryTypes
-from PersonalDataApi.profiles.models import Profile
+from PersonalDataApi.users.models import Profile
 
 from PersonalDataApi.services.google_speech_api import transcribe_file
 from PersonalDataApi.services.sound_processing_services import SoundClassifier

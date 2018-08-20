@@ -49,7 +49,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'graphene_file_upload',
     'PersonalDataApi.datapoints.apps.datapointsConfig',
-    'PersonalDataApi.profiles.apps.profilesConfig',
+    'PersonalDataApi.users.apps.usersConfig',
 ]
 
 MIDDLEWARE = [

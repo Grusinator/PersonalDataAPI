@@ -52,16 +52,6 @@
     <Compile Include="PersonalDataApi\datapoints\tests.py" />
     <Compile Include="PersonalDataApi\datapoints\views.py" />
     <Compile Include="PersonalDataApi\datapoints\__init__.py" />
-    <Compile Include="PersonalDataApi\profiles\admin.py" />
-    <Compile Include="PersonalDataApi\profiles\apps.py" />
-    <Compile Include="PersonalDataApi\profiles\migrations\__init__.py" />
-    <Compile Include="PersonalDataApi\profiles\models.py" />
-    <Compile Include="PersonalDataApi\profiles\schema.py">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="PersonalDataApi\profiles\tests.py" />
-    <Compile Include="PersonalDataApi\profiles\views.py" />
-    <Compile Include="PersonalDataApi\profiles\__init__.py" />
     <Compile Include="PersonalDataApi\schema.py">
       <SubType>Code</SubType>
     </Compile>
@@ -87,9 +77,13 @@
     <Compile Include="PersonalDataApi\users\schema.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="PersonalDataApi\users\__init__.py">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="PersonalDataApi\users\admin.py" />
+    <Compile Include="PersonalDataApi\users\apps.py" />
+    <Compile Include="PersonalDataApi\users\migrations\__init__.py" />
+    <Compile Include="PersonalDataApi\users\models.py" />
+    <Compile Include="PersonalDataApi\users\tests.py" />
+    <Compile Include="PersonalDataApi\users\views.py" />
+    <Compile Include="PersonalDataApi\users\__init__.py" />
     <Compile Include="PersonalDataApi\__init__.py" />
     <Compile Include="PersonalDataApi\settings.py" />
     <Compile Include="PersonalDataApi\urls.py" />
@@ -112,10 +106,11 @@
     <Folder Include="app\static\app\scripts\" />
     <Folder Include="app\templates\" />
     <Folder Include="app\templates\app\" />
+    <Folder Include="PersonalDataApi\users\" />
+    <Folder Include="PersonalDataApi\users\migrations\" />
+    <Folder Include="PersonalDataApi\users\templates\" />
+    <Folder Include="PersonalDataApi\users\templates\users\" />
     <Folder Include="tests\" />
-    <Folder Include="PersonalDataApi\profiles\" />
-    <Folder Include="PersonalDataApi\profiles\migrations\" />
-    <Folder Include="PersonalDataApi\profiles\templates\" />
     <Folder Include="PersonalDataApi\services\" />
     <Folder Include="PersonalDataApi\datapoints\" />
     <Folder Include="PersonalDataApi\datapoints\migrations\" />
@@ -125,20 +120,19 @@
     <Folder Include="PersonalDataApi\services\sound_classification\utils\" />
     <Folder Include="PersonalDataApi\services\sound_classification\utils\vggish\" />
     <Folder Include="PersonalDataApi\services\sound_classification\utils\youtube8m\" />
-    <Folder Include="PersonalDataApi\users\" />
     <Folder Include="PersonalDataApi\" />
     <Folder Include="tests\testdata\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="db.sqlite3" />
     <Content Include="PersonalDataApi\datapoints\templates\index.html" />
-    <Content Include="PersonalDataApi\profiles\templates\index.html" />
     <Content Include="PersonalDataApi\services\sound_classification\models\class_labels_indices.csv" />
     <Content Include="PersonalDataApi\services\sound_classification\models\vggish_model.ckpt" />
     <Content Include="PersonalDataApi\services\sound_classification\models\vggish_pca_params.npz" />
     <Content Include="PersonalDataApi\services\sound_classification\models\youtube_model.ckpt.data-00000-of-00001" />
     <Content Include="PersonalDataApi\services\sound_classification\models\youtube_model.ckpt.index" />
     <Content Include="PersonalDataApi\services\sound_classification\models\youtube_model.ckpt.meta" />
+    <Content Include="PersonalDataApi\users\templates\users\index.html" />
     <Content Include="Pipfile" />
     <Content Include="requirements.txt" />
     <Content Include="app\static\app\content\bootstrap.css" />
