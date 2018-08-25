@@ -15,7 +15,7 @@ from PersonalDataApi.datapoints.models import Datapoint, CategoryTypes
 from PersonalDataApi.users.models import Profile
 
 from PersonalDataApi.services.google_speech_api import transcribe_file
-from PersonalDataApi.services.sound_processing_services import SoundClassifier
+#from PersonalDataApi.services.sound_processing_services import SoundClassifier
 
 GrapheneCategoryTypes = graphene.Enum.from_enum(CategoryTypes)
 
@@ -41,8 +41,6 @@ class CreateDatapoint(graphene.Mutation):
     value = graphene.Float()
     text_from_audio = graphene.String()
 
-    
-
     class Arguments:
         datetime = graphene.DateTime()
         category = GrapheneCategoryTypes()
@@ -51,57 +49,135 @@ class CreateDatapoint(graphene.Mutation):
         text_from_audio = graphene.String()
         files = Upload()
 
-
-    @login_required
-    def mutate(self, info, category, source_device,
-               datetime=None, value=None, text_from_audio=None, files=None):
+    def speech_audio(self, info, category, source_device,
+            datetime=None, value=None, text_from_audio=None, files=None):
 
         uploaded_image = uploaded_audio = None
 
         if files != None:
             #make sure which one is the image, audio
             # currently we are assuming the first one is image, the second audio
-            uploaded_image = info.context.FILES.get(files[0])
+            # uploaded_image = info.context.FILES.get(files[0])
             uploaded_audio = info.context.FILES.get(files[1])
 
-   
+        valid_voice_list = ["Speech", "Dialog", "Laughter"]
+
         profile = Profile.objects.get(user=info.context.user)
 
-        valid_voice_list = ["Speech", "Dialog", "Laughter"]
-        
-        if uploaded_audio is not None:
+        if uploaded_audio is None:
+            raise GraphQLError("no audiofile recieved")
+        else:
             text_from_audio = ""
             
-            try:
-                raise ValueError('not implemented fully yet')
-                sound_clasifier = SoundClassifier()
-                predictions = sound_clasifier.classify_sound(uploaded_audio)
+            #try:
+            #    raise ValueError('not implemented fully yet')
+            #    sound_clasifier = SoundClassifier()
+            #    predictions = sound_clasifier.classify_sound(uploaded_audio)
 
-                best_keywords = list(map(lambda x: x[0], predictions))
+            #    best_keywords = list(map(lambda x: x[0], predictions))
 
-                if not set(best_keywords) & set(valid_voice_list):
-                    text_from_audio = "!V! "
-                    #text_from_audio = "Not voice, more likely: " + " or ".join(best_keywords)
-            except Exception as e:
-                print(e)
+            #    if not set(best_keywords) & set(valid_voice_list):
+            #        text_from_audio = "!V! "
+            #        #text_from_audio = "Not voice, more likely: " + " or ".join(best_keywords)
+            #except Exception as e:
+            #    print(e)
 
             try:
                 text_from_audio += transcribe_file(uploaded_audio, profile.language) if (uploaded_audio != None) else None 
             except ValueError as e:
                 print(e)
 
-        
+        return Datapoint(
+                datetime=datetime,
+                category=category,
+                image=uploaded_image,
+                audio=uploaded_audio,
+                source_device=source_device,
+                value=value,
+                text_from_audio=text_from_audio,
+                owner=info.context.user,
+            )
 
-        datapoint = Datapoint(
-            datetime=datetime,
-            category=category,
-            image=uploaded_image,
-            audio=uploaded_audio,
-            source_device=source_device,
-            value=value,
-            text_from_audio=text_from_audio,
-            owner=info.context.user,
-        )
+    def test(self, info, category, source_device,
+               datetime=None, value=None, text_from_audio=None, files=None):
+        return Datapoint(
+                datetime=datetime,
+                category=category,
+                image=None,
+                audio=None,
+                source_device=source_device,
+                value=value,
+                text_from_audio=text_from_audio,
+                owner=info.context.user)
+    
+    def weight(self, info, category, source_device,
+               datetime=None, value=None, text_from_audio=None, files=None):
+        return Datapoint(
+                datetime=datetime,
+                category=category,
+                image=None,
+                audio=None,
+                source_device=source_device,
+                value=value,
+                text_from_audio=text_from_audio,
+                owner=info.context.user)
+
+    def shit_cam (self, info, category, source_device,
+               datetime=None, value=None, text_from_audio=None, files=None):
+        return Datapoint(
+                datetime=datetime,
+                category=category,
+                image=None,
+                audio=None,
+                source_device=source_device,
+                value=value,
+                text_from_audio=text_from_audio,
+                owner=info.context.user)
+    def food_picture(self, info, category, source_device,
+               datetime=None, value=None, text_from_audio=None, files=None):
+        return Datapoint(
+                datetime=datetime,
+                category=category,
+                image=None,
+                audio=None,
+                source_device=source_device,
+                value=value,
+                text_from_audio=text_from_audio,
+                owner=info.context.user)
+
+    def heart_rate(self, info, category, source_device,
+               datetime=None, value=None, text_from_audio=None, files=None):
+        return Datapoint(
+                datetime=datetime,
+                category=category,
+                image=None,
+                audio=None,
+                source_device=source_device,
+                value=value,
+                text_from_audio=text_from_audio,
+                owner=info.context.user)
+
+    def select_mutate_variant(self, category):
+        functionlist = dict()
+        for e in CategoryTypes:
+            functionlist[e.name] = getattr(CreateDatapoint, e.name)
+
+        # Get the function from functionlist dictionary
+        func = functionlist.get(CategoryTypes(category).name)
+        # Execute the function
+        return func
+
+    @login_required
+    def mutate(self, info, category, source_device,
+               datetime=None, value=None, text_from_audio=None, files=None):
+
+        function = CreateDatapoint.select_mutate_variant(self, category)
+
+        datapoint = function(self, info, category, source_device,
+               datetime=None, value=None, text_from_audio=None, files=None)
+   
+        profile = Profile.objects.get(user=info.context.user)
+            
         datapoint.save()
 
         return CreateDatapoint(

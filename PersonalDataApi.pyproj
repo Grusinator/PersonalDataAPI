@@ -74,6 +74,12 @@
     <Compile Include="PersonalDataApi\services\voice_activity_detection.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="PersonalDataApi\tests\GraphQLTestCase.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="PersonalDataApi\tests\__init__.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="PersonalDataApi\users\schema.py">
       <SubType>Code</SubType>
     </Compile>
@@ -92,7 +98,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="PersonalDataApi\services\__init__.py" />
-    <Compile Include="tests\TestServices.py">
+    <Compile Include="PersonalDataApi\tests\TestServices.py">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
@@ -110,7 +116,7 @@
     <Folder Include="PersonalDataApi\users\migrations\" />
     <Folder Include="PersonalDataApi\users\templates\" />
     <Folder Include="PersonalDataApi\users\templates\users\" />
-    <Folder Include="tests\" />
+    <Folder Include="PersonalDataApi\tests\" />
     <Folder Include="PersonalDataApi\services\" />
     <Folder Include="PersonalDataApi\datapoints\" />
     <Folder Include="PersonalDataApi\datapoints\migrations\" />
@@ -121,7 +127,7 @@
     <Folder Include="PersonalDataApi\services\sound_classification\utils\vggish\" />
     <Folder Include="PersonalDataApi\services\sound_classification\utils\youtube8m\" />
     <Folder Include="PersonalDataApi\" />
-    <Folder Include="tests\testdata\" />
+    <Folder Include="PersonalDataApi\tests\testdata\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="db.sqlite3" />
@@ -163,7 +169,7 @@
     <Content Include="app\templates\app\layout.html" />
     <Content Include="app\templates\app\login.html" />
     <Content Include="app\templates\app\loginpartial.html" />
-    <Content Include="tests\testdata\sample.wav" />
+    <Content Include="PersonalDataApi\tests\testdata\sample.wav" />
   </ItemGroup>
   <ItemGroup>
     <None Include="readme.html">
