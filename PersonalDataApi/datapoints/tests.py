@@ -6,7 +6,9 @@ Replace this with more appropriate tests for your application.
 """
 import json
 import django
-from django.test import TestCase
+#from django.contrib.auth import get_user_model
+
+
 
 from PersonalDataApi.tests.GraphQLTestCase import GraphQLTestCase
 
@@ -23,7 +25,58 @@ class DatapointTestCase(GraphQLTestCase):
         django.setup()
 
         
+    def test_other(self):
+        input = {
+            "datetime": None,
+	        "category": "test",
+	        "source_device": "insomnia",
+	        "value": None,
+	        "text_from_audio": None
+        }
 
+
+        output = {
+            "datetime": None,
+	        "category": "test",
+	        "sourceDevice": "insomnia",
+	        "value": None,
+	        "textFromAudio": None
+        }
+
+        
+
+        resp = self.execute_test_client_api_query(
+            # The mutation's graphql code
+            '''
+            mutation createDatapointMutation(
+	            $datetime: DateTime, 
+	            $category: CategoryTypes,
+	            $source_device: String!,
+	            $value: Float,
+	            $text_from_audio: String
+            ) {
+              createDatapoint(
+		            datetime:$datetime, 
+		            category:$category,
+		            sourceDevice:$source_device,
+		            value:$value,
+		            textFromAudio:$text_from_audio
+	            )
+                {
+                    datetime
+	                category
+	                sourceDevice
+	                value
+	                textFromAudio
+                }
+            }
+            ''',
+            variable_values = input,
+            user=self.user
+        )
+
+
+        self.assertResponseNoErrors(resp, {"createDatapoint" : output})
 
 
     def test_create_datapoint_audiodata(self):
@@ -48,7 +101,7 @@ class DatapointTestCase(GraphQLTestCase):
 	        "textFromAudio": None
         }
 
-        resp = self.query(
+        resp = self.execute(
             # The mutation's graphql code
             '''
             mutation createDatapointMutation(
@@ -64,13 +117,14 @@ class DatapointTestCase(GraphQLTestCase):
 		            sourceDevice:$source_device,
 		            value:$value,
 		            textFromAudio:$text_from_audio
-	            ){
+	            )
+                {
                     datetime
 	                category
 	                sourceDevice
 	                value
 	                textFromAudio
-              }
+                }
             }
             ''',
             # The operation name (from the 1st line of the mutation)

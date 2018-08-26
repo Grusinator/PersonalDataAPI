@@ -24,6 +24,8 @@ class DatapointTestCase(GraphQLTestCase):
 
     def test_login_mutation_successful(self):
         # User.objects.create(username='test', password='hunter2')
+
+
         resp = self.query(
             # The mutation's graphql code
             '''

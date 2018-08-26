@@ -15,7 +15,7 @@ class Profile(models.Model):
         choices=[(tag.value, tag.name) for tag in Languages])
     profilepicture = models.ImageField(upload_to='profilepictures', null=True, blank=True)
     audio_threshold = models.FloatField(null=True,blank=True)
-
+    profile_description = models.TextField(null=True, blank=True)
     
     user = models.OneToOneField(settings.AUTH_USER_MODEL, null=True, on_delete=models.CASCADE)
 

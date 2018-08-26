@@ -2,6 +2,12 @@ import json
 from django.test import TestCase
 from django.test import Client
 from graphene.test import Client as GrapheneClient
+#
+
+
+from django.test import RequestFactory, TestCase
+
+
 
 # Inherit from this in your test cases
 class GraphQLTestCase(TestCase):
@@ -10,19 +16,34 @@ class GraphQLTestCase(TestCase):
         self._client = Client()
         self.token = None
 
-    def add_authorization(self, token):
-        self._client.headers.update({'authorization': 'JWT '+token})
+        from PersonalDataApi.schema import schema
+        self._gqlclient = GrapheneClient(schema)
+        
+        from django.contrib.auth.models import User
+        self.user = User.objects.get(username="guest")
 
-    def execute(self, query: str, operation_name: str = None, variables: dict = None, token: str = None):
+    def execute_test_client_api_query(self, api_query, user=None, variable_values=None, **kwargs):
+        """
+        Returns the results of executing a graphQL query using the graphene test client.  This is a helper method for our tests
+        """
+        request_factory = RequestFactory()
+        context_value = request_factory.get('/api/')
+        context_value.user = user
+        client = self._gqlclient
+        executed = client.execute(api_query, context_value=context_value, variable_values=variable_values, **kwargs)
+        return executed
+
+    def execute(self, query: str, operation_name: str = None, variables: dict = None):
 
         body = {'query': query}
         if operation_name:
             body['operation_name'] = operation_name
-        if input:
+        if variables:
             body['variables'] =  variables
 
-        client = GrapheneClient()
-        executed = client.execute(json.dumps(body), context_value={'authorization': 'JWT '+token})
+        header = {"Authorization": "JWT " + self.token} if self.token else {}
+
+        executed = self._gqlclient.execute(json.dumps(body), context_value=header)
 
         return executed
 
@@ -48,7 +69,6 @@ class GraphQLTestCase(TestCase):
             body['variables'] =  variables
 
         header = {"Authorization": "JWT " + self.token} if self.token else {}
-        header["Content-Type"] = "application/json"
 
         resp = self._client.post('/graphql', json.dumps(body),
                                  content_type='application/json',
@@ -58,7 +78,7 @@ class GraphQLTestCase(TestCase):
 
     def login(self, username:str = "guest", password:str = "test1234"):
         # User.objects.create(username='test', password='hunter2')
-        resp = self.query(
+        resp = self.execute(
             # The mutation's graphql code
             '''
             mutation LoginMutation($username: String!, $password: String!) {
@@ -72,8 +92,8 @@ class GraphQLTestCase(TestCase):
             variables = {'username': username, 'password': password}
         )
         self.assertResponseNoErrors(resp)
-
         self.token = resp["data"]["tokenAuth"]["token"]
+        self._client.defaults['Authorization'] = "JWT " + self.token
         
 
     def assertResponseNoErrors(self, resp: dict, expected: dict = None):
