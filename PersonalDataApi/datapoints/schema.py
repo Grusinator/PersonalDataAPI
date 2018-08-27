@@ -63,7 +63,7 @@ class CreateDatapoint(graphene.Mutation):
             #make sure which one is the image, audio
             # currently we are assuming the first one is image, the second audio
             # uploaded_image = info.context.FILES.get(files[0])
-            uploaded_audio = info.context.FILES.get(files[1])
+            uploaded_audio = info.context.FILES["0"]
 
         valid_voice_list = ["Speech", "Dialog", "Laughter"]
 
