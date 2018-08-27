@@ -11,7 +11,7 @@ import app.views
 
 from graphene_django.views import GraphQLView
 #in order to upload files
-from graphene_file_upload import ModifiedGraphQLView 
+from graphene_file_upload.django import FileUploadGraphQLView
 
 # Uncomment the next lines to enable the admin:
 from django.conf.urls import include
@@ -51,7 +51,7 @@ urlpatterns = [
 
     # Uncomment the next line to enable the admin:
     url(r'^admin/', admin.site.urls),
-    url(r'^graphql', ModifiedGraphQLView.as_view(graphiql=True)),
+    url(r'^graphql', FileUploadGraphQLView.as_view(graphiql=True)),
 ]
 
 

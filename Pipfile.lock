@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "dcfccbdbf2d850a286a704a38ddcb760245d95a1856d128d1432a6ade9004068"
+            "sha256": "ce7f2d5642808bb6254903a0566a3c183024d32ba415b9b87ccace217a8de33d"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -93,10 +93,10 @@
         },
         "django-service-objects": {
             "hashes": [
-                "sha256:4970c5aee725566f91aae95dd78da151a242edaae3e0c332a51688de059d5763"
+                "sha256:15b8bcf1cdb90d3d3f9873721792410da4e31504a90de99fca4e6ad8c14dcae9"
             ],
             "index": "pypi",
-            "version": "==0.4.0"
+            "version": "==0.5.0"
         },
         "djongo": {
             "hashes": [
@@ -132,11 +132,11 @@
         },
         "graphene-file-upload": {
             "hashes": [
-                "sha256:804af6c43296f87ebc4999cc0b7d7e01fea36fc6af9c344bed9341bb61006692",
-                "sha256:aed0a9702eccda0750403b58e837b2631357457c7f4d793724d9930c1bb997a1"
+                "sha256:c3688859b8e5aa79979a286e3de55284fd0cc43c527352bcca6de17e8fd9828b",
+                "sha256:e4dfb4ec9132fc613143b14e3b15d8a306b7373b6a23c343bb83279af2cf7ba1"
             ],
             "index": "pypi",
-            "version": "==0.1.2"
+            "version": "==1.0.0"
         },
         "graphql-core": {
             "hashes": [
@@ -171,6 +171,13 @@
                 "sha256:e71daed9a0e6373642db61166fa70beecc9bf04383477f84671348c02a04cbdf"
             ],
             "version": "==0.11.3"
+        },
+        "inflection": {
+            "hashes": [
+                "sha256:18ea7fb7a7d152853386523def08736aa8c32636b047ade55f7578c4edeb16ca"
+            ],
+            "index": "pypi",
+            "version": "==0.3.1"
         },
         "iso8601": {
             "hashes": [
@@ -565,11 +572,11 @@
         },
         "typing": {
             "hashes": [
-                "sha256:3a887b021a77b292e151afb75323dea88a7bc1b3dfa92176cff8e44c8b68bddf",
-                "sha256:b2c689d54e1144bbcfd191b0832980a21c2dbcf7b5ff7a66248a60c90e951eb8",
-                "sha256:d400a9344254803a2368533e4533a4200d21eb7b6b729c173bc38201a74db3f2"
+                "sha256:4027c5f6127a6267a435201981ba156de91ad0d1d98e9ddc2aa173453453492d",
+                "sha256:57dcf675a99b74d64dacf6fba08fb17cf7e3d5fdff53d4a30ea2a5e7e52543d4",
+                "sha256:a4c8473ce11a65999c8f59cb093e70686b6c84c98df58c1dae9b3b196089858a"
             ],
-            "version": "==3.6.4"
+            "version": "==3.6.6"
         },
         "uritemplate": {
             "hashes": [

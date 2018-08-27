@@ -21,6 +21,13 @@ class CategoryTypes(Enum):
     food_picture = "FOD"
     heart_rate = "HRT"
 
+    def force_value(input):
+        for category in CategoryTypes:
+            if input == category.name:
+                return category.value
+            elif input == category.value:
+                return category.value
+
 class Datapoint(models.Model):
     datetime = models.DateTimeField(auto_now=True)
     category = models.TextField(null=False, blank=False, max_length=3,
@@ -35,6 +42,18 @@ class Datapoint(models.Model):
 
     def __str__(self):
         return "%i - %s - %s - %s "%(self.id, self.category, self.owner.username, self.datetime.strftime("%Y-%m-%d %H:%M:%S"))
+
+    def __eq__(self, other):
+        selfdict = self.__dict__.copy()
+        otherdict = other.__dict__.copy()
+
+        selfdict.pop("_state")
+        otherdict.pop("_state")
+        selfdict.pop("datetime")
+        otherdict.pop("datetime")
+
+        return selfdict == otherdict
+        #return self.__dict__ == other.__dict__
 
     class Meta:
         app_label = 'datapoints'

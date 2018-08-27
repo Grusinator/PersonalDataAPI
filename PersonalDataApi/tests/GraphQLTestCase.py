@@ -2,10 +2,12 @@ import json
 from django.test import TestCase
 from django.test import Client
 from graphene.test import Client as GrapheneClient
-#
+import inflection
+
 
 
 from django.test import RequestFactory, TestCase
+
 
 
 
@@ -21,6 +23,9 @@ class GraphQLTestCase(TestCase):
         
         from django.contrib.auth.models import User
         self.user = User.objects.get(username="guest")
+
+        
+        from PersonalDataApi.users.models import Profile
 
     def execute_test_client_api_query(self, api_query, user=None, variable_values=None, **kwargs):
         """
@@ -104,5 +109,37 @@ class GraphQLTestCase(TestCase):
         self.assertNotIn('errors', resp, 'Response had errors')
         if expected is not None:
             self.assertEqual(resp['data'], expected, 'Response has correct data')
+
+    def response_to_datapoints(self, resp, mutationname):
+        
+        datapointlist = []
+
+        resplist = resp["data"][mutationname]
+
+        for key, value in resplist.items():
+
+            if key == "datapoint":
+                datapointlist.append(self.dict_to_datapoint(value))
+        return datapointlist
+
+    def dict_to_datapoint(self, dict):
+        from PersonalDataApi.datapoints.models import Datapoint, CategoryTypes
+        us_dict ={}
+        #convert all keys to underscore
+        for key, value in dict.items():
+            us_dict[inflection.underscore(key)] = dict[key]
+
+        return Datapoint(
+                    #id=obj["id"],
+                    datetime=us_dict["datetime"],
+                    category=CategoryTypes.force_value(us_dict["category"]),  
+                    source_device=us_dict["source_device"],
+                    value=us_dict["value"],
+                    text_from_audio=us_dict["text_from_audio"]
+                )
+
+
+    def response_to_user_and_profile(self, resp):
+        pass
 
    

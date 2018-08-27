@@ -25,25 +25,15 @@ class DatapointTestCase(GraphQLTestCase):
         django.setup()
 
         
-    def test_other(self):
+    def test_create_test_datapoint(self):
         input = {
-            "datetime": None,
+            "datetime": '2018-08-27T09:41:17.912790+00:00',
 	        "category": "test",
 	        "source_device": "insomnia",
-	        "value": None,
-	        "text_from_audio": None
+	        "value": 2.0,
+	        "text_from_audio": "test"
         }
 
-
-        output = {
-            "datetime": None,
-	        "category": "test",
-	        "sourceDevice": "insomnia",
-	        "value": None,
-	        "textFromAudio": None
-        }
-
-        
 
         resp = self.execute_test_client_api_query(
             # The mutation's graphql code
@@ -63,11 +53,13 @@ class DatapointTestCase(GraphQLTestCase):
 		            textFromAudio:$text_from_audio
 	            )
                 {
+                datapoint{
                     datetime
 	                category
 	                sourceDevice
 	                value
 	                textFromAudio
+                }
                 }
             }
             ''',
@@ -75,8 +67,15 @@ class DatapointTestCase(GraphQLTestCase):
             user=self.user
         )
 
+        datapoint = self.response_to_datapoints(resp,"createDatapoint")[0]
 
-        self.assertResponseNoErrors(resp, {"createDatapoint" : output})
+        inputdatapoint = self.dict_to_datapoint(input)
+
+        test = datapoint == inputdatapoint
+        self.assertEqual(datapoint, inputdatapoint)
+
+        self.assertResponseNoErrors(resp)
+
 
 
     def test_create_datapoint_audiodata(self):

@@ -1,15 +1,19 @@
 import graphene
+from graphene import AbstractType, Node, Mutation, String, ObjectType, Field, List, Date, Enum, Float
+
 from graphene_django.filter import DjangoFilterConnectionField
 from graphene_django.types import DjangoObjectType
 
-from graphene_file_upload import Upload
-
+from graphene_file_upload.scalars import Upload
 from graphql.error import GraphQLError
 
 from graphql_jwt.decorators import login_required
 
 from PersonalDataApi.users.schema import UserType
+
 from django.contrib.auth import get_user_model
+
+
 
 from PersonalDataApi.datapoints.models import Datapoint, CategoryTypes
 from PersonalDataApi.users.models import Profile
@@ -17,7 +21,7 @@ from PersonalDataApi.users.models import Profile
 from PersonalDataApi.services.google_speech_api import transcribe_file
 #from PersonalDataApi.services.sound_processing_services import SoundClassifier
 
-GrapheneCategoryTypes = graphene.Enum.from_enum(CategoryTypes)
+GrapheneCategoryTypes = Enum.from_enum(CategoryTypes)
 
 class DatapointType(DjangoObjectType):
     class Meta:
@@ -30,16 +34,17 @@ class DatapointType(DjangoObjectType):
         #}
 
 class CreateDatapoint(graphene.Mutation):
-    id = graphene.Int()
-    datetime = graphene.DateTime()
-    category = GrapheneCategoryTypes()
-    source_device = graphene.String()
-    value = graphene.Float()
-    text_from_audio = graphene.String()
-    owner = graphene.Field(UserType)
-    source_device = graphene.String()
-    value = graphene.Float()
-    text_from_audio = graphene.String()
+    datapoint = Field(DatapointType)
+    #id = graphene.Int()
+    #datetime = graphene.DateTime()
+    #category = GrapheneCategoryTypes()
+    #source_device = graphene.String()
+    #value = graphene.Float()
+    #text_from_audio = graphene.String()
+    #owner = graphene.Field(UserType)
+    #source_device = graphene.String()
+    #value = graphene.Float()
+    #text_from_audio = graphene.String()
 
     class Arguments:
         datetime = graphene.DateTime()
@@ -174,21 +179,21 @@ class CreateDatapoint(graphene.Mutation):
         function = CreateDatapoint.select_mutate_variant(self, category)
 
         datapoint = function(self, info, category, source_device,
-               datetime=None, value=None, text_from_audio=None, files=None)
+               datetime, value, text_from_audio, files)
    
         profile = Profile.objects.get(user=info.context.user)
             
         datapoint.save()
 
-        return CreateDatapoint(
-            id=datapoint.id,
-            datetime=datapoint.datetime,
-            category=datapoint.category,
-            source_device=datapoint.source_device,
-            value=datapoint.value,
-            text_from_audio=datapoint.text_from_audio,
-            owner=datapoint.owner,
-        )
+        return CreateDatapoint(datapoint=datapoint)
+        #    id=datapoint.id,
+        #    datetime=datapoint.datetime,
+        #    category=datapoint.category,
+        #    source_device=datapoint.source_device,
+        #    value=datapoint.value,
+        #    text_from_audio=datapoint.text_from_audio,
+        #    owner=datapoint.owner,
+        #)
 
 class DeleteDatapoint(graphene.Mutation):
     id = graphene.Int()
@@ -262,6 +267,7 @@ class Upload2Files(graphene.Mutation):
     def mutate(self, info, files, **kwargs):
         # file parameter is key to uploaded file in FILES from context
         uploaded_file = info.context.FILES.get(files[0])
+        uploaded_file = info.context.FILES["0"]
         uploaded_file2 = info.context.FILES.get(files[1])
         # do something with your file
 
