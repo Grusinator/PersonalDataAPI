@@ -25,3 +25,15 @@ class Profile(models.Model):
 
     class Meta:
         app_label = 'users'
+
+class ThirdPartyProfile(models.Model):
+    provider = models.TextField(null=False, blank=False) # consider if this shoud be a foreignkey to provider or enum
+    profile = models.ForeignKey(Profile, null=False, on_delete=models.CASCADE)
+    access_token = models.TextField(null=False, blank = False)
+    profile_json_field = models.TextField(null=False,blank = False)
+
+    def __str__(self):
+        return "%s - %s"%(self.provider, self.profile.user.username)
+
+    class Meta:
+        app_label = 'users'

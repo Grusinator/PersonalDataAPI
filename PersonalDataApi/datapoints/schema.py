@@ -11,7 +11,8 @@ from graphql_jwt.decorators import login_required
 
 from PersonalDataApi.users.schema import UserType
 
-from django.contrib.auth import get_user_model
+#from django.contrib.auth import get_user_model
+from django.contrib.auth.models import User
 
 
 
@@ -35,16 +36,6 @@ class DatapointType(DjangoObjectType):
 
 class CreateDatapoint(graphene.Mutation):
     datapoint = Field(DatapointType)
-    #id = graphene.Int()
-    #datetime = graphene.DateTime()
-    #category = GrapheneCategoryTypes()
-    #source_device = graphene.String()
-    #value = graphene.Float()
-    #text_from_audio = graphene.String()
-    #owner = graphene.Field(UserType)
-    #source_device = graphene.String()
-    #value = graphene.Float()
-    #text_from_audio = graphene.String()
 
     class Arguments:
         datetime = graphene.DateTime()
@@ -186,14 +177,6 @@ class CreateDatapoint(graphene.Mutation):
         datapoint.save()
 
         return CreateDatapoint(datapoint=datapoint)
-        #    id=datapoint.id,
-        #    datetime=datapoint.datetime,
-        #    category=datapoint.category,
-        #    source_device=datapoint.source_device,
-        #    value=datapoint.value,
-        #    text_from_audio=datapoint.text_from_audio,
-        #    owner=datapoint.owner,
-        #)
 
 class DeleteDatapoint(graphene.Mutation):
     id = graphene.Int()

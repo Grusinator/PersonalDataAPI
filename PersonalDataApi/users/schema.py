@@ -1,10 +1,11 @@
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import User
 
 from graphene import AbstractType, Node, Mutation, String, ObjectType, Field, List, Date, Enum, Float
 from graphene_django import DjangoObjectType
 from graphene_django.filter import DjangoFilterConnectionField
 
-from PersonalDataApi.users.models import Profile, Languages
+from PersonalDataApi.users.models import Profile, ThirdPartyProfile, Languages
 from graphql.error import GraphQLError
 
 from graphql_jwt.decorators import login_required
@@ -13,12 +14,12 @@ GrapheneLanguages = Enum.from_enum(Languages)
 
 class UserType(DjangoObjectType):
     class Meta:
-        model = get_user_model()
+        model = User
         #interfaces = (Node, )
         #filter_fields = {
         #    'username': ['exact', 'icontains', 'istartswith'],
         #    'email': ['exact', 'icontains'],
-         #   }
+        #   }
 
 class ProfileType(DjangoObjectType):
     class Meta:
@@ -29,6 +30,10 @@ class ProfileType(DjangoObjectType):
         #    'name': ['exact', 'icontains', 'istartswith'],
         #    'notes': ['exact', 'icontains'],
         #}
+class ThirdPartyProfileType(DjangoObjectType):
+    class Meta:
+        model = ThirdPartyProfile
+
 
 class CreateUser(Mutation):
     user = Field(UserType)
@@ -42,7 +47,7 @@ class CreateUser(Mutation):
         language = GrapheneLanguages()
 
     def mutate(self, info, username, password, email, birthdate=None, language="English"):
-        user = get_user_model()(
+        user = User(
             username=username,
             email=email,
         )
@@ -88,14 +93,41 @@ class UpdateProfile(Mutation):
 
         return UpdateProfile(profile)
 
+class CreateThirdPartyProfile(Mutation):
+    third_party_profile = Field(ThirdPartyProfileType)
+
+    class Arguments:
+        provider = String()
+        access_token = String()
+        profile_json_field = String()
+
+
+    @login_required
+    def mutate(self, info, provider, access_token, profile_json_field):
+        try:
+            profile = Profile.objects.get(user=info.context.user)
+        except Exception as e:
+            raise GraphQLError("profile object has not been created successfully: " + str(e))
+
+        third_party_profile = ThirdPartyProfile(
+            profile = profile,
+            provider = provider,
+            profile_json_field = profile_json_field)
+
+        third_party_profile.save()
+
+        return CreateThirdPartyProfile(third_party_profile = third_party_profile)
+
+
 class Mutation(ObjectType):
     create_user = CreateUser.Field()
     update_profile = UpdateProfile.Field()
-
+    create_third_party_profile = CreateThirdPartyProfile.Field()
 
 class Query(ObjectType):
     user = Field(UserType)
     profile = Field(ProfileType)
+    third_party_profiles = List(ThirdPartyProfileType)
 
     @login_required
     def resolve_user(self, info):
@@ -104,4 +136,9 @@ class Query(ObjectType):
     @login_required
     def resolve_profile(self, info):
         return Profile.objects.get(user=info.context.user)
+
+    @login_required
+    def resolve_third_party_profiles(self, info):
+        profile = Profile.objects.get(user=info.context.user)
+        return ThirdPartyProfile.objects.filter(profile=profile)
          
