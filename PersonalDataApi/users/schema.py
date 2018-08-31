@@ -112,6 +112,7 @@ class CreateThirdPartyProfile(Mutation):
         third_party_profile = ThirdPartyProfile(
             profile = profile,
             provider = provider,
+            access_token = access_token,
             profile_json_field = profile_json_field)
 
         third_party_profile.save()
