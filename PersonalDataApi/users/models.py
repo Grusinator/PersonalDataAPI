@@ -11,13 +11,13 @@ class Languages(Enum):
 
 class Profile(models.Model):
     birthdate = models.DateField(null=True, blank=True)
-    language = models.TextField(null=False, blank=False, max_length=2,
+    language = models.TextField(blank=False, max_length=2,
         choices=[(tag.value, tag.name) for tag in Languages])
     profilepicture = models.ImageField(upload_to='profilepictures', null=True, blank=True)
     audio_threshold = models.FloatField(null=True,blank=True)
-    profile_description = models.TextField(null=True, blank=True)
+    profile_description = models.TextField(blank=True)
     
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, null=True, on_delete=models.CASCADE)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
 
     def __str__(self):
