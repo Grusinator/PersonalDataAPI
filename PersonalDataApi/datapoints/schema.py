@@ -16,7 +16,8 @@ from django.contrib.auth.models import User
 
 
 
-from PersonalDataApi.datapoints.models import Datapoint, CategoryTypes
+from PersonalDataApi.datapoints.models import CategoryTypes, DatapointV2, MetaData, RawData
+from PersonalDataApi.datapoints.schema_processing import ProcessRawData
 from PersonalDataApi.users.models import Profile
 
 from PersonalDataApi.services.google_speech_api import transcribe_file
@@ -26,7 +27,7 @@ GrapheneCategoryTypes = Enum.from_enum(CategoryTypes)
 
 class DatapointType(DjangoObjectType):
     class Meta:
-        model = Datapoint
+        model = DatapointV2
         # Allow for some more advanced filtering here
         #interfaces = (graphene.Node, )
         #filter_fields = {
@@ -38,195 +39,113 @@ class CreateDatapoint(graphene.Mutation):
     datapoint = Field(DatapointType)
 
     class Arguments:
-        datetime = graphene.DateTime()
-        category = GrapheneCategoryTypes()
-        source_device = graphene.String()
+        starttime = graphene.DateTime()
+        endtime = graphene.DateTime()
         value = graphene.Float()
-        text_from_audio = graphene.String()
-        files = Upload()
+        std = graphene.Float()
 
-    def speech_audio(self, info, category, source_device,
-            datetime=None, value=None, text_from_audio=None, files=None):
+        #meta params
+        source = graphene.String()
+        category = GrapheneCategoryTypes()
+        label = graphene.String()
 
-        uploaded_image = uploaded_audio = None
+    @login_required
+    def mutate(self, info, source, category, label, value, std,
+               starttime, stoptime=None):
 
-        if files != None:
-            #make sure which one is the image, audio
-            # currently we are assuming the first one is image, the second audio
-            # uploaded_image = info.context.FILES.get(files[0])
-            uploaded_audio = info.context.FILES["0"]
-
-        valid_voice_list = ["Speech", "Dialog", "Laughter"]
-
-        profile = Profile.objects.get(user=info.context.user)
-
-        if uploaded_audio is None:
-            raise GraphQLError("no audiofile recieved")
-        else:
-            text_from_audio = ""
-            
-            #try:
-            #    raise ValueError('not implemented fully yet')
-            #    sound_clasifier = SoundClassifier()
-            #    predictions = sound_clasifier.classify_sound(uploaded_audio)
-
-            #    best_keywords = list(map(lambda x: x[0], predictions))
-
-            #    if not set(best_keywords) & set(valid_voice_list):
-            #        text_from_audio = "!V! "
-            #        #text_from_audio = "Not voice, more likely: " + " or ".join(best_keywords)
-            #except Exception as e:
-            #    print(e)
-
-            try:
-                text_from_audio += transcribe_file(uploaded_audio, profile.language) if (uploaded_audio != None) else None 
-            except ValueError as e:
-                print(e)
-
-        return Datapoint(
-                datetime=datetime,
+        try:
+            metadata = MetaData.objects.get(
+                source=source,
                 category=category,
-                image=uploaded_image,
-                audio=uploaded_audio,
-                source_device=source_device,
-                value=value,
-                text_from_audio=text_from_audio,
-                owner=info.context.user,
+                label=label
+                )
+        except Exception as e:
+            raise GraphQLError("no metadata object correspond to the combination of source, category and label")
+            
+
+        datapoint = DatapointV2(
+            starttime=starttime,
+            stoptime=stoptime,
+            value=value,
+            std=std,
+            metadata=metadata,
+            owner=info.context.user
             )
 
-    def test(self, info, category, source_device,
-               datetime=None, value=None, text_from_audio=None, files=None):
-        return Datapoint(
-                datetime=datetime,
-                category=category,
-                image=None,
-                audio=None,
-                source_device=source_device,
-                value=value,
-                text_from_audio=text_from_audio,
-                owner=info.context.user)
-    
-    def weight(self, info, category, source_device,
-               datetime=None, value=None, text_from_audio=None, files=None):
-        return Datapoint(
-                datetime=datetime,
-                category=category,
-                image=None,
-                audio=None,
-                source_device=source_device,
-                value=value,
-                text_from_audio=text_from_audio,
-                owner=info.context.user)
-
-    def shit_cam (self, info, category, source_device,
-               datetime=None, value=None, text_from_audio=None, files=None):
-        return Datapoint(
-                datetime=datetime,
-                category=category,
-                image=None,
-                audio=None,
-                source_device=source_device,
-                value=value,
-                text_from_audio=text_from_audio,
-                owner=info.context.user)
-    def food_picture(self, info, category, source_device,
-               datetime=None, value=None, text_from_audio=None, files=None):
-        return Datapoint(
-                datetime=datetime,
-                category=category,
-                image=None,
-                audio=None,
-                source_device=source_device,
-                value=value,
-                text_from_audio=text_from_audio,
-                owner=info.context.user)
-
-    def heart_rate(self, info, category, source_device,
-               datetime=None, value=None, text_from_audio=None, files=None):
-        return Datapoint(
-                datetime=datetime,
-                category=category,
-                image=None,
-                audio=None,
-                source_device=source_device,
-                value=value,
-                text_from_audio=text_from_audio,
-                owner=info.context.user)
-
-    def select_mutate_variant(self, category):
-        functionlist = dict()
-        for e in CategoryTypes:
-            functionlist[e.name] = getattr(CreateDatapoint, e.name)
-
-        # Get the function from functionlist dictionary
-        func = functionlist.get(CategoryTypes(category).name)
-        # Execute the function
-        return func
-
-    @login_required
-    def mutate(self, info, category, source_device,
-               datetime=None, value=None, text_from_audio=None, files=None):
-
-        function = CreateDatapoint.select_mutate_variant(self, category)
-
-        datapoint = function(self, info, category, source_device,
-               datetime, value, text_from_audio, files)
-   
-        profile = Profile.objects.get(user=info.context.user)
-            
         datapoint.save()
 
-        return CreateDatapoint(datapoint=datapoint)
+        return CreateDatapoint(datapoint)
 
-class DeleteDatapoint(graphene.Mutation):
-    id = graphene.Int()
-    owner = graphene.Field(UserType)
+class RawDataType(DjangoObjectType):
+    class Meta:
+        model = RawData
 
-    class Arguments:
-        id = graphene.Int()
-
-    @login_required
-    def mutate(self, info, id):
-        try:
-            datapoint = Datapoint.objects.get(id=id, owner=info.context.user)
-        except:
-            raise GraphQLError('that datapoint id does not exist, or you do not own it')
-
-        datapoint.delete()
-        return CreateDatapoint(
-            id=datapoint.id,
-            owner=datapoint.owner
-        )
-
-class EditDatapoint(graphene.Mutation):
-    id = graphene.Int()
-    owner = graphene.Field(UserType)
+class CreateRawData(graphene.Mutation):
+    rawdata = Field(RawDataType)
 
     class Arguments:
-        id = graphene.Int()
+        starttime = graphene.DateTime()
+        stoptime = graphene.DateTime()
+        files = Upload() #image and audio
+        value = graphene.Float()
+        std = graphene.Float()
+        text = graphene.String()
+        
+        #meta params
+        source = graphene.String()
+        category = GrapheneCategoryTypes()
+        label = graphene.String()
+
+
 
     @login_required
-    def mutate(self, info, id, name=None, notes=None):
+    def mutate(self, info, source, category, label, starttime, stoptime=None,
+                value=None, std=None, text=None, files=None):
+
+        metadata = MetaData.objects.get(
+                source=source,
+                category=category,
+                label=label,
+                raw=true
+            )
+
+        #Raw data should be processed into datapoints
         try:
-            datapoint = Datapoint.objects.get(id=id, owner=info.context.user) 
+            function = ProcessRawData.select_mutate_variant(self, category)
+
+            datalist = function(self, info, source, category, label, starttime, stoptime=None,
+                value=None, std=None, text=None, files=None)
+
+            for data in datalist:
+                if isinstance(DatapointV2):
+                    data.save()
+                elif isinstance(RawData):
+                    data.metadata = metadata
+                    data.save()
+                    #make sure that the raw data is passed to response
+                    rawdata = data
         except:
-            raise GraphQLError("datapoint does not exist, or you dont own this datapoint")
+            pass
+            print("eror occored while processing raw data..")
 
-        #update each attribute
-        if name is not None:
-            datapoint.name=name
-        if notes is not None:
-            datapoint.notes=notes
-        datapoint.save()
+            rawdata = RawData(
+                starttime=starttime,
+                stoptime=stoptime,
+                image=None,
+                audio=None,
+                value=value,
+                std=std,
+                text=text,
+                metadata=metadata,
+                owner=info.context.user
+            )
 
-        return CreateDatapoint(
-            id=datapoint.id,
-            name=datapoint.name,
-            notes=datapoint.notes,
-            owner=datapoint.owner
-        )
+            rawdata.save()
+
+        return CreateRawData(rawdata=rawdata)
 
 
+# test upload
 class UploadFile(graphene.Mutation):
     class Arguments:
         file = Upload(required=True)
@@ -256,25 +175,30 @@ class Upload2Files(graphene.Mutation):
 
         return UploadFile(success=uploaded_file != None)
 
+# wrap all queries and mutations
 class Query(graphene.ObjectType):
     datapoint = graphene.Field(DatapointType)
+    all_rawdata = graphene.List(RawDataType)
     all_datapoints = graphene.List(DatapointType)
 
     @login_required
     def resolve_datapoint(self, info):
 
-        datapoint = Datapoint.objects.filter(owner=info.context.user).first()
+        datapoint = DatapointV2.objects.filter(owner=info.context.user).first()
         return datapoint
 
     @login_required
     def resolve_all_datapoints(self, info):
+        datapointlist = DatapointV2.objects.filter(owner=info.context.user)
+        return datapointlist
 
-        datapointlist = Datapoint.objects.filter(owner=info.context.user)
+    @login_required
+    def resolve_all_rawdata(self, info):
+        datapointlist = RawData.objects.filter(owner=info.context.user)
         return datapointlist
 
 class Mutation(graphene.ObjectType):
     create_datapoint = CreateDatapoint.Field()
-    edit_datapoint = EditDatapoint.Field()
-    delete_datapoint = DeleteDatapoint.Field()
+    create_rawdata = CreateRawData.Field()
     upload_file = UploadFile.Field()
     upload2_files = Upload2Files.Field()
