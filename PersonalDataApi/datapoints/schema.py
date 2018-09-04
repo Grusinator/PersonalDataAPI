@@ -25,6 +25,10 @@ from PersonalDataApi.services.google_speech_api import transcribe_file
 
 GrapheneCategoryTypes = Enum.from_enum(CategoryTypes)
 
+class MetaDataType(DjangoObjectType):
+    class Meta:
+        model = MetaData
+
 class DatapointType(DjangoObjectType):
     class Meta:
         model = DatapointV2
