@@ -22,7 +22,7 @@ class CategoryTypes(Enum):
     ment_act = "ment_act"
     body_meas = "body_meas"
 
-    def force_value(input):
+    def force_value(self, input):
         for category in CategoryTypes:
             if input == category.name:
                 return category.value
